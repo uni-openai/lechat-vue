@@ -1,12 +1,12 @@
 {
-    "name": "chatgpt-web",
+    "name": "lechat-vue",
     "version": "2.10.9",
     "private": false,
-    "description": "ChatGPT Web",
+    "description": "LeChat Vue",
     "author": "ChenZhaoYu <chenzhaoyu1994@gmail.com>",
     "keywords": [
-        "chatgpt-web",
         "chatgpt",
+        "LeChat",
         "chatbot",
         "vue"
     ],

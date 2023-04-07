@@ -3,35 +3,55 @@
 import { defineStore } from 'pinia'
 import { getToken, removeToken, setToken } from './helper'
 import { store } from '@/store'
-import { fetchSession } from '@/api'
+import { fetchUserInfo, fetchSignIn } from '@/api'
 
-interface SessionResponse {
-    auth: boolean
+interface UserInfoResponse {
+    id: number
+    name: string
+    phone: string
+    countryCode: number
+    avatar: string
+    token: string
+    tokenTime: Date
+    wxOpenId: string
+    wxUnionId: string
     model: 'ChatGPTAPI' | 'ChatGPTUnofficialProxyAPI'
 }
 
-export interface AuthState {
+export interface UserState {
     token: string | undefined
-    session: SessionResponse | null
+    user: UserInfoResponse | null
 }
 
 export const useAuthStore = defineStore('auth-store', {
-    state: (): AuthState => ({
+    state: (): UserState => ({
         token: getToken(),
-        session: null
+        user: null
     }),
 
     getters: {
         isChatGPTAPI(state): boolean {
-            return state.session?.model === 'ChatGPTAPI'
+            return state.user?.model === 'ChatGPTAPI'
         }
     },
 
     actions: {
-        async getSession() {
+        async getUserInfo() {
             try {
-                const { data } = await fetchSession<SessionResponse>()
-                this.session = { ...data }
+                const { data } = await fetchUserInfo<UserInfoResponse>()
+                this.setToken(data.token) // refresh user token
+                this.user = { ...data }
+                return Promise.resolve(data)
+            } catch (error) {
+                return Promise.reject(error)
+            }
+        },
+
+        async signIn(username: string, password: string) {
+            try {
+                const { data } = await fetchSignIn<UserInfoResponse>(username, password)
+                this.setToken(data.token) // refresh user token
+                this.user = { ...data }
                 return Promise.resolve(data)
             } catch (error) {
                 return Promise.reject(error)

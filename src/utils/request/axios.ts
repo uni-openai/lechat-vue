@@ -6,7 +6,6 @@ import { useAuthStore } from '@/store'
 const service = axios.create({
     baseURL: import.meta.env.VITE_API_URL
 })
-console.log(import.meta.env)
 
 service.interceptors.request.use(
     config => {

@@ -34,11 +34,13 @@ function http<T = any>({
     const successHandler = (res: AxiosResponse<Response<T>>) => {
         const authStore = useAuthStore()
 
-        if (res.data.status === 1 || typeof res.data === 'string') return res.data
+        // status 1
+        if (parseInt(res.data.status.toString()) === 1) return res.data
 
-        if (res.data.status === -1) {
+        // no login
+        if (parseInt(res.data.status.toString()) === -1) {
             authStore.removeToken()
-            window.location.reload()
+            return res.data
         }
 
         return Promise.reject(res.data)

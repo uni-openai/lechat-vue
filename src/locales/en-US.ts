@@ -1,6 +1,7 @@
 /** @format */
 
 export default {
+    'Sign In': 'Sign In',
     common: {
         add: 'Add',
         addSuccess: 'Add Success',

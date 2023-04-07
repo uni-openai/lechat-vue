@@ -99,7 +99,8 @@ watch(
 
 <style lang="less" scoped>
 .logo {
-    width: 200px;
+    width: 60%;
+    min-width: 150px;
     margin: 0 auto;
 }
 </style>

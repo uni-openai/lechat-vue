@@ -22,6 +22,12 @@ const routes: RouteRecordRaw[] = [
     },
 
     {
+        path: '/login',
+        name: 'login',
+        component: () => import('@/views/chat/login.vue')
+    },
+
+    {
         path: '/404',
         name: '404',
         component: () => import('@/views/exception/404/index.vue')

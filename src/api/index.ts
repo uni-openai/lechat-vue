@@ -38,9 +38,16 @@ export function fetchChatAPIProcess<T = any>(params: {
     })
 }
 
-export function fetchSession<T>() {
+export function fetchUserInfo<T>() {
     return post<T>({
-        url: '/lechat/session'
+        url: '/lechat/userinfo'
+    })
+}
+
+export function fetchSignIn<T>(username: string, password: string) {
+    return post<T>({
+        url: '/lechat/sign-in',
+        data: { username, password }
     })
 }
 
