@@ -1,0 +1,28 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:vue/vue3-essential",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended"
+    ],
+    "overrides": [],
+    "parser": "vue-eslint-parser",
+    "parserOptions": {
+        "parser": "@typescript-eslint/parser",
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": ["vue", "@typescript-eslint"],
+    "rules": {
+        // 在Eslint中开启prettier校验规则
+        "prettier/prettier": "error",
+        // 关闭名称校验
+        "vue/multi-word-component-names": "off",
+        "no-undef": "off",
+        "@typescript-eslint/no-explicit-any": ["off"]
+    }
+}
