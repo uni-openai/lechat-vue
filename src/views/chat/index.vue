@@ -25,6 +25,7 @@ const HISTORY = 5
 const route = useRoute()
 const dialog = useDialog()
 const ms = useMessage()
+const model = 'GPT'
 
 const chatStore = useChatStore()
 
@@ -93,7 +94,9 @@ async function onConversation() {
     scrollToBottom()
 
     const prompts = []
-    for (const item of conversationList.value.slice(-HISTORY)) {
+    const { value } = conversationList
+    const history = value.length > HISTORY ? value.slice(-HISTORY) : value
+    for (const item of history) {
         if (item.requestOptions.prompt)
             prompts.push({
                 role: 'user',
@@ -109,20 +112,21 @@ async function onConversation() {
     try {
         await fetchChatAPIProcess<Chat.ConversationResponse>({
             prompts,
+            model,
             onDownloadProgress: ({ event }) => {
                 const xhr = event.target
                 const { responseText } = xhr
                 const chunk: string[] = responseText.split('data:')
-                const data = JSON.parse(chunk[chunk.length - 1].trim())
-                updateChat(+uuid, dataSources.value.length - 1, {
-                    dateTime: new Date().toLocaleString(),
-                    text: data.data.content ?? '',
-                    inversion: false,
-                    error: false,
-                    loading: true,
-                    conversationOptions: { conversationId: data.conversationId, parentMessageId: data.id },
-                    requestOptions: { prompt: message, options: null }
-                })
+                const res = JSON.parse(chunk[chunk.length - 1].trim())
+                if (res.data && res.data.content)
+                    updateChat(+uuid, dataSources.value.length - 1, {
+                        dateTime: new Date().toLocaleString(),
+                        text: res.data.content,
+                        inversion: false,
+                        error: false,
+                        loading: true,
+                        requestOptions: { prompt: message, options: null }
+                    })
 
                 scrollToBottomIfAtBottom()
             }
@@ -130,7 +134,7 @@ async function onConversation() {
         updateChatSome(+uuid, dataSources.value.length - 1, { loading: false })
     } catch (error: any) {
         console.error(error)
-        const errorMessage = error?.message ?? t('common.wrong')
+        const text = error?.message ?? t('common.wrong')
 
         if (error.message === 'canceled') {
             updateChatSome(+uuid, dataSources.value.length - 1, {
@@ -144,7 +148,7 @@ async function onConversation() {
 
         if (currentChat?.text && currentChat.text !== '') {
             updateChatSome(+uuid, dataSources.value.length - 1, {
-                text: `ERROR: ${errorMessage}`,
+                text: `ERROR: ${text}`,
                 error: false,
                 loading: false
             })
@@ -153,7 +157,7 @@ async function onConversation() {
 
         updateChat(+uuid, dataSources.value.length - 1, {
             dateTime: new Date().toLocaleString(),
-            text: errorMessage,
+            text,
             inversion: false,
             error: true,
             loading: false,
@@ -188,7 +192,9 @@ async function onRegenerate(index: number) {
     })
 
     const prompts = []
-    for (const item of conversationList.value.slice(-HISTORY)) {
+    const { value } = conversationList
+    const history = value.length > HISTORY ? value.slice(-HISTORY) : value
+    for (const item of history) {
         if (item.requestOptions.prompt)
             prompts.push({
                 role: 'user',
@@ -200,23 +206,25 @@ async function onRegenerate(index: number) {
                 content: item.text
             })
     }
+
     try {
         await fetchChatAPIProcess<Chat.ConversationResponse>({
             prompts,
+            model,
             onDownloadProgress: ({ event }) => {
                 const xhr = event.target
                 const { responseText } = xhr
                 const chunk: string[] = responseText.split('data:')
-                const data = JSON.parse(chunk[chunk.length - 1].trim())
-                updateChat(+uuid, index, {
-                    dateTime: new Date().toLocaleString(),
-                    text: data.data.content ?? '',
-                    inversion: false,
-                    error: false,
-                    loading: true,
-                    conversationOptions: { conversationId: data.conversationId, parentMessageId: data.id },
-                    requestOptions: { prompt: message }
-                })
+                const res = JSON.parse(chunk[chunk.length - 1].trim())
+                if (res.data && res.data.content)
+                    updateChat(+uuid, index, {
+                        dateTime: new Date().toLocaleString(),
+                        text: res.data.content,
+                        inversion: false,
+                        error: false,
+                        loading: true,
+                        requestOptions: { prompt: message }
+                    })
                 scrollToBottomIfAtBottom()
             }
         })
@@ -229,15 +237,13 @@ async function onRegenerate(index: number) {
             return
         }
 
-        const errorMessage = error?.message ?? t('common.wrong')
-
+        const text = error?.message ?? t('common.wrong')
         updateChat(+uuid, index, {
             dateTime: new Date().toLocaleString(),
-            text: errorMessage,
+            text,
             inversion: false,
             error: true,
             loading: false,
-            conversationOptions: null,
             requestOptions: { prompt: message }
         })
     } finally {

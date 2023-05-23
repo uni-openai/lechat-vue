@@ -1,6 +1,15 @@
 /** @format */
 
 export default {
+    signIn: '登陆',
+    username: '用户名',
+    password: '密码',
+    'username is none': '用户名不能为空',
+    'password is none': '密码不能为空',
+    success: '成功',
+    error: '失败',
+    'success to sign in': '登陆成功',
+    'Invalid username or password': '账号名或密码错误',
     common: {
         add: '添加',
         addSuccess: '添加成功',

@@ -37,25 +37,17 @@ export const useAuthStore = defineStore('auth-store', {
 
     actions: {
         async getUserInfo() {
-            try {
-                const { data } = await fetchUserInfo<UserInfoResponse>()
-                this.setToken(data.token) // refresh user token
-                this.user = { ...data }
-                return Promise.resolve(data)
-            } catch (error) {
-                return Promise.reject(error)
-            }
+            const { data } = await fetchUserInfo<UserInfoResponse>()
+            this.setToken(data.token) // refresh user token
+            this.user = { ...data }
+            return data
         },
 
-        async signIn(username: string, password: string) {
-            try {
-                const { data } = await fetchSignIn<UserInfoResponse>(username, password)
-                this.setToken(data.token) // refresh user token
-                this.user = { ...data }
-                return Promise.resolve(data)
-            } catch (error) {
-                return Promise.reject(error)
-            }
+        async signIn(params: { username: string; password: string }) {
+            const { data } = await fetchSignIn<UserInfoResponse>(params.username, params.password)
+            this.setToken(data.token) // refresh user token
+            this.user = { ...data }
+            return data
         },
 
         setToken(token: string) {

@@ -3,8 +3,6 @@
 import type { AxiosProgressEvent, GenericAbortSignal } from 'axios'
 import { post } from '@/utils/request'
 
-const MODEL = 'GPT'
-
 export function fetchChatAPI<T = any>(
     prompt: string,
     options?: { conversationId?: string; parentMessageId?: string },
@@ -30,15 +28,14 @@ interface Prompt {
 
 export function fetchChatAPIProcess<T = any>(params: {
     prompts: Prompt[]
+    model: string
     onDownloadProgress?: (progressEvent: AxiosProgressEvent) => void
 }) {
-    const prompts = MODEL === 'GLM' ? params.prompts.slice(2) : params.prompts
+    const model = params.model || 'GLM' // default is GLM
+    const prompts = model === 'GLM' && params.prompts.length > 2 ? params.prompts.slice(-2) : params.prompts
     return post<T>({
         url: '/ai/chat-stream',
-        data: {
-            model: MODEL,
-            prompts
-        },
+        data: { model, prompts },
         onDownloadProgress: params.onDownloadProgress
     })
 }

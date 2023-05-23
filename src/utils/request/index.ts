@@ -31,20 +31,21 @@ function http<T = any>({
     beforeRequest,
     afterRequest
 }: HttpOption) {
-    const successHandler = (res: AxiosResponse<Response<T>>) => {
+    const successHandler = ({ data }: AxiosResponse<Response<T>>) => {
         // stream
-        if (typeof res.data === 'string' && (res.data as string).includes('data:')) return res.data
+        if (typeof data === 'string' && (data as string).includes('data:')) return data
+
         // status 1: success
-        if (parseInt(res.data.status.toString()) === 1) return res.data
+        if (parseInt(data.status.toString()) === 1) return data
 
         // status -1: no login
-        if (parseInt(res.data.status.toString()) === -1) {
+        if (parseInt(data.status.toString()) === -1) {
             useAuthStore().removeToken()
-            return res.data
+            return data
         }
 
         // other status
-        return Promise.reject(res.data)
+        throw new Error(data.msg || '')
     }
 
     const failHandler = (error: Response<Error>) => {

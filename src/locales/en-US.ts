@@ -1,7 +1,15 @@
 /** @format */
 
 export default {
-    'Sign In': 'Sign In',
+    signIn: 'Sign In',
+    username: 'UserName',
+    password: 'Password',
+    'username is none': 'Username can not be null',
+    'password is none': 'Password can not be null',
+    success: 'Success',
+    error: 'Error',
+    'success to sign in': 'Success to sign in',
+    'Invalid username or password': 'Invalid username or password',
     common: {
         add: 'Add',
         addSuccess: 'Add Success',

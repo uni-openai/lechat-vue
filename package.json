@@ -2,10 +2,11 @@
     "name": "lechat-vue",
     "version": "2.10.9",
     "private": false,
-    "description": "LeChat Vue",
-    "author": "ChenZhaoYu <chenzhaoyu1994@gmail.com>",
+    "description": "LeChat Vue Pro",
+    "author": "devilyouwei <devilyouwei@foxmail.com>, ChenZhaoYu <chenzhaoyu1994@gmail.com> ",
     "keywords": [
         "chatgpt",
+        "chatglm",
         "LeChat",
         "chatbot",
         "vue"
