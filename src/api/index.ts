@@ -2,7 +2,8 @@
 
 import type { AxiosProgressEvent, GenericAbortSignal } from 'axios'
 import { post } from '@/utils/request'
-import { useSettingStore } from '@/store'
+
+const MODEL = 'GPT'
 
 export function fetchChatAPI<T = any>(
     prompt: string,
@@ -22,18 +23,22 @@ export function fetchChatConfig<T = any>() {
     })
 }
 
+interface Prompt {
+    role: string
+    content: string
+}
+
 export function fetchChatAPIProcess<T = any>(params: {
-    prompt: string
-    options?: { conversationId?: string; parentMessageId?: string }
-    signal?: GenericAbortSignal
+    prompts: Prompt[]
     onDownloadProgress?: (progressEvent: AxiosProgressEvent) => void
 }) {
-    const settingStore = useSettingStore()
-
+    const prompts = MODEL === 'GLM' ? params.prompts.slice(2) : params.prompts
     return post<T>({
-        url: '/lechat/chat-process',
-        data: { prompt: params.prompt, options: params.options, systemMessage: settingStore.systemMessage },
-        signal: params.signal,
+        url: '/ai/chat-stream',
+        data: {
+            model: MODEL,
+            prompts
+        },
         onDownloadProgress: params.onDownloadProgress
     })
 }

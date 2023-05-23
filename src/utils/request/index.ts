@@ -32,17 +32,18 @@ function http<T = any>({
     afterRequest
 }: HttpOption) {
     const successHandler = (res: AxiosResponse<Response<T>>) => {
-        const authStore = useAuthStore()
-
-        // status 1
+        // stream
+        if (typeof res.data === 'string' && (res.data as string).includes('data:')) return res.data
+        // status 1: success
         if (parseInt(res.data.status.toString()) === 1) return res.data
 
-        // no login
+        // status -1: no login
         if (parseInt(res.data.status.toString()) === -1) {
-            authStore.removeToken()
+            useAuthStore().removeToken()
             return res.data
         }
 
+        // other status
         return Promise.reject(res.data)
     }
 
