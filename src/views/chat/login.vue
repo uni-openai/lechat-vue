@@ -77,22 +77,21 @@ const $ = useNotification()
 
 async function signIn() {
     try {
-        loading.value = true
         if (!form.value.username.trim() || !form.value.password.trim()) return
+        loading.value = true
         const store = useAuthStoreWithout()
         await store.signIn({ username: form.value.username, password: form.value.password })
         $.success({
-            meta: t('success'),
+            title: t('success'),
             content: t('success to sign in')
         })
-        router.push('/')
+        router.replace('/')
     } catch (e) {
         $.error({
-            content: t('error'),
-            meta: t((e as Error).message)
+            title: t('error'),
+            content: t((e as Error).message)
         })
         console.error(e)
-    } finally {
         loading.value = false
     }
 }

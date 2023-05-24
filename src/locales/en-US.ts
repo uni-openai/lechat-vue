@@ -8,7 +8,7 @@ export default {
     'password is none': 'Password can not be null',
     success: 'Success',
     error: 'Error',
-    'success to sign in': 'Success to sign in',
+    'success to sign in': 'Success to sign in, waiting for opening chat session!',
     'Invalid username or password': 'Invalid username or password',
     common: {
         add: 'Add',

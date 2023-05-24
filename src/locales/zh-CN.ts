@@ -8,7 +8,7 @@ export default {
     'password is none': '密码不能为空',
     success: '成功',
     error: '失败',
-    'success to sign in': '登陆成功',
+    'success to sign in': '登陆成功，正在跳转聊天窗口！',
     'Invalid username or password': '账号名或密码错误',
     common: {
         add: '添加',
