@@ -83,12 +83,14 @@ async function signIn() {
         await store.signIn({ username: form.value.username, password: form.value.password })
         $.success({
             title: t('success'),
+            duration: 5000,
             content: t('success to sign in')
         })
         router.replace('/')
     } catch (e) {
         $.error({
             title: t('error'),
+            duration: 3000,
             content: t((e as Error).message)
         })
         console.error(e)
@@ -111,8 +113,8 @@ async function signIn() {
     .login-panel {
         -webkit-box-shadow: 3px 3px 10px #888888;
         box-shadow: 3px 3px 10px #888888;
-        padding: 5rem;
-        border-radius: 1rem;
+        border-radius: 2.5rem;
+        padding: 1.5rem;
 
         .title {
             font-size: 28px;

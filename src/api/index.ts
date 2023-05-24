@@ -1,19 +1,8 @@
 /** @format */
 
-import type { AxiosProgressEvent, GenericAbortSignal } from 'axios'
+import type { AxiosProgressEvent } from 'axios'
 import { post } from '@/utils/request'
-
-export function fetchChatAPI<T = any>(
-    prompt: string,
-    options?: { conversationId?: string; parentMessageId?: string },
-    signal?: GenericAbortSignal
-) {
-    return post<T>({
-        url: '/chat',
-        data: { prompt, options },
-        signal
-    })
-}
+import { getToken } from '@/store/modules/auth/helper'
 
 export function fetchChatConfig<T = any>() {
     return post<T>({
@@ -26,7 +15,7 @@ interface Prompt {
     content: string
 }
 
-export function fetchChatAPIProcess<T = any>(params: {
+export function fetchChat<T = any>(params: {
     prompts: Prompt[]
     model: string
     onDownloadProgress?: (progressEvent: AxiosProgressEvent) => void
@@ -34,15 +23,17 @@ export function fetchChatAPIProcess<T = any>(params: {
     const model = params.model || 'GLM' // default is GLM
     const prompts = model === 'GLM' && params.prompts.length > 2 ? params.prompts.slice(-2) : params.prompts
     return post<T>({
-        url: '/ai/chat-stream',
+        url: '/lechat/chat',
         data: { model, prompts },
+        headers: { token: getToken() },
         onDownloadProgress: params.onDownloadProgress
     })
 }
 
 export function fetchUserInfo<T>() {
     return post<T>({
-        url: '/lechat/userinfo'
+        url: '/lechat/userinfo',
+        headers: { token: getToken() }
     })
 }
 
@@ -50,12 +41,5 @@ export function fetchSignIn<T>(username: string, password: string) {
     return post<T>({
         url: '/lechat/sign-in',
         data: { username, password }
-    })
-}
-
-export function fetchVerify<T>(token: string) {
-    return post<T>({
-        url: '/verify',
-        data: { token }
     })
 }

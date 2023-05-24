@@ -1517,6 +1517,11 @@
     estree-walker "^2.0.2"
     picomatch "^2.3.1"
 
+"@stdlib/assert-is-json@^0.0.8":
+  version "0.0.8"
+  resolved "https://registry.npmmirror.com/@stdlib/assert-is-json/-/assert-is-json-0.0.8.tgz#befca4b58a676eb5a39e205afc0322074272ce2f"
+  integrity sha512-bgln0jwdlw+QM+EgG1hi+37kL7CDlSuBe0vPAzDSkfUs8NsOguaxiLpibyk3SJ/E6uWNrPEtli5WTRMEP9lH+A==
+
 "@surma/rollup-plugin-off-main-thread@^2.2.3":
   version "2.2.3"
   resolved "https://registry.npmmirror.com/@surma/rollup-plugin-off-main-thread/-/rollup-plugin-off-main-thread-2.2.3.tgz#ee34985952ca21558ab0d952f00298ad2190c053"

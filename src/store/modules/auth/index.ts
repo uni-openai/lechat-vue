@@ -15,7 +15,7 @@ interface UserInfoResponse {
     tokenTime: Date
     wxOpenId: string
     wxUnionId: string
-    model: 'ChatGPTAPI' | 'ChatGPTUnofficialProxyAPI'
+    model: 'GLM' | 'GPT'
 }
 
 export interface UserState {
@@ -29,25 +29,23 @@ export const useAuthStore = defineStore('auth-store', {
         user: null
     }),
 
-    getters: {
-        isChatGPTAPI(state): boolean {
-            return state.user?.model === 'ChatGPTAPI'
-        }
-    },
-
     actions: {
         async getUserInfo() {
             const { data } = await fetchUserInfo<UserInfoResponse>()
             this.setToken(data.token) // refresh user token
-            this.user = { ...data }
+            this.user = data
             return data
         },
 
         async signIn(params: { username: string; password: string }) {
             const { data } = await fetchSignIn<UserInfoResponse>(params.username, params.password)
             this.setToken(data.token) // refresh user token
-            this.user = { ...data }
+            this.user = data
             return data
+        },
+
+        getToken() {
+            return this.token
         },
 
         setToken(token: string) {

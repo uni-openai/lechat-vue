@@ -1,6 +1,7 @@
 /** @format */
 
 export default {
+    lechat: '乐聊',
     signIn: '登陆',
     username: '用户名',
     password: '密码',
@@ -40,7 +41,7 @@ export default {
     },
     chat: {
         newChatButton: '新建聊天',
-        placeholder: '来说点什么吧...（Shift + Enter = 换行，"/" 触发提示词）',
+        placeholder: '说点什么吧...',
         placeholderMobile: '来说点什么...',
         copy: '复制',
         copied: '复制成功',

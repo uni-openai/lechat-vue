@@ -16,8 +16,9 @@ import HeaderComponent from './components/Header/index.vue'
 import { HoverButton, SvgIcon } from '@/components/common'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { useChatStore, usePromptStore } from '@/store'
-import { fetchChatAPIProcess } from '@/api'
+import { fetchChat } from '@/api'
 import { t } from '@/locales'
+import isJson from '@stdlib/assert-is-json'
 
 let controller = new AbortController()
 const HISTORY = 5
@@ -110,14 +111,16 @@ async function onConversation() {
     }
 
     try {
-        await fetchChatAPIProcess<Chat.ConversationResponse>({
+        await fetchChat<Chat.ConversationResponse>({
             prompts,
             model,
             onDownloadProgress: ({ event }) => {
                 const xhr = event.target
                 const { responseText } = xhr
                 const chunk: string[] = responseText.split('data:')
-                const res = JSON.parse(chunk[chunk.length - 1].trim())
+                const json = chunk[chunk.length - 1].trim()
+                if (!isJson(json)) return
+                const res = JSON.parse(json)
                 if (res.data && res.data.content)
                     updateChat(+uuid, dataSources.value.length - 1, {
                         dateTime: new Date().toLocaleString(),
@@ -208,14 +211,16 @@ async function onRegenerate(index: number) {
     }
 
     try {
-        await fetchChatAPIProcess<Chat.ConversationResponse>({
+        await fetchChat<Chat.ConversationResponse>({
             prompts,
             model,
             onDownloadProgress: ({ event }) => {
                 const xhr = event.target
                 const { responseText } = xhr
                 const chunk: string[] = responseText.split('data:')
-                const res = JSON.parse(chunk[chunk.length - 1].trim())
+                const json = chunk[chunk.length - 1].trim()
+                if (!isJson(json)) return
+                const res = JSON.parse(json)
                 if (res.data && res.data.content)
                     updateChat(+uuid, index, {
                         dateTime: new Date().toLocaleString(),

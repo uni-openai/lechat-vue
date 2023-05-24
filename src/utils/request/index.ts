@@ -41,6 +41,7 @@ function http<T = any>({
         // status -1: no login
         if (parseInt(data.status.toString()) === -1) {
             useAuthStore().removeToken()
+            location.replace('/')
             return data
         }
 

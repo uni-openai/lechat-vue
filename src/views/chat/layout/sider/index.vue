@@ -14,6 +14,7 @@
     >
         <div class="flex flex-col h-full" :style="mobileSafeArea">
             <NImage class="logo" :src="logo" lazy />
+            <div class="logo-title">{{ $t('lechat') }}</div>
             <main class="flex flex-col flex-1 min-h-0">
                 <div class="p-4">
                     <NButton dashed block @click="handleAdd">
@@ -42,7 +43,7 @@ import Footer from './Footer.vue'
 import { useAppStore, useChatStore } from '@/store'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { PromptStore } from '@/components/common'
-import logo from '@/assets/logo.png'
+import logo from '@/assets/lechat.png'
 
 const appStore = useAppStore()
 const chatStore = useChatStore()
@@ -94,8 +95,14 @@ watch(
 
 <style lang="less" scoped>
 .logo {
-    width: 60%;
-    min-width: 150px;
+    width: 3rem;
     margin: 0 auto;
+    margin-top: 10px;
+}
+.logo-title {
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+    font-weight: bold;
+    text-align: center;
 }
 </style>
