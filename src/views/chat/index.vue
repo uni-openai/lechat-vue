@@ -117,7 +117,7 @@ async function onConversation() {
             onDownloadProgress: ({ event }) => {
                 const xhr = event.target
                 const { responseText } = xhr
-                const chunk: string[] = responseText.split('data:')
+                const chunk: string[] = responseText.split(/^data:/gm)
                 const json = chunk[chunk.length - 1].trim()
                 if (!isJson(json)) return
                 const res = JSON.parse(json)
@@ -136,7 +136,6 @@ async function onConversation() {
         })
         updateChatSome(+uuid, dataSources.value.length - 1, { loading: false })
     } catch (error: any) {
-        console.error(error)
         const text = error?.message ?? t('common.wrong')
 
         if (error.message === 'canceled') {
@@ -217,19 +216,20 @@ async function onRegenerate(index: number) {
             onDownloadProgress: ({ event }) => {
                 const xhr = event.target
                 const { responseText } = xhr
-                const chunk: string[] = responseText.split('data:')
+                const chunk: string[] = responseText.split(/^data:/gm)
                 const json = chunk[chunk.length - 1].trim()
                 if (!isJson(json)) return
                 const res = JSON.parse(json)
                 if (res.data && res.data.content)
-                    updateChat(+uuid, index, {
-                        dateTime: new Date().toLocaleString(),
-                        text: res.data.content,
-                        inversion: false,
-                        error: false,
-                        loading: true,
-                        requestOptions: { prompt: message }
-                    })
+                    if (res.data && res.data.content)
+                        updateChat(+uuid, index, {
+                            dateTime: new Date().toLocaleString(),
+                            text: res.data.content,
+                            inversion: false,
+                            error: false,
+                            loading: true,
+                            requestOptions: { prompt: message }
+                        })
                 scrollToBottomIfAtBottom()
             }
         })
