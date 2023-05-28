@@ -95,25 +95,35 @@ async function onConversation() {
     scrollToBottom()
 
     const prompts = []
-    const { value } = conversationList
-    const history = value.length > HISTORY ? value.slice(-HISTORY) : value
-    for (const item of history) {
-        if (item.requestOptions.prompt)
-            prompts.push({
-                role: 'user',
-                content: item.requestOptions.prompt
-            })
-        if (item.text)
-            prompts.push({
-                role: 'assistant',
-                content: item.text
-            })
+    const online = chatStore.usingContext
+    if (!online) {
+        // push history
+        const { value } = conversationList
+        const history = value.length > HISTORY ? value.slice(-HISTORY) : value
+        for (const item of history) {
+            if (item.requestOptions.prompt)
+                prompts.push({
+                    role: 'user',
+                    content: item.requestOptions.prompt
+                })
+            if (item.text)
+                prompts.push({
+                    role: 'assistant',
+                    content: item.text
+                })
+        }
+    } else {
+        prompts.push({
+            role: 'user',
+            content: message
+        })
     }
 
     try {
         await fetchChat<Chat.ConversationResponse>({
             prompts,
             model,
+            online,
             onDownloadProgress: ({ event }) => {
                 const xhr = event.target
                 const { responseText } = xhr
@@ -194,25 +204,35 @@ async function onRegenerate(index: number) {
     })
 
     const prompts = []
-    const { value } = conversationList
-    const history = value.length > HISTORY ? value.slice(-HISTORY) : value
-    for (const item of history) {
-        if (item.requestOptions.prompt)
-            prompts.push({
-                role: 'user',
-                content: item.requestOptions.prompt
-            })
-        if (item.text)
-            prompts.push({
-                role: 'assistant',
-                content: item.text
-            })
+    const online = chatStore.usingContext
+    if (!online) {
+        // push history
+        const { value } = conversationList
+        const history = value.length > HISTORY ? value.slice(-HISTORY) : value
+        for (const item of history) {
+            if (item.requestOptions.prompt)
+                prompts.push({
+                    role: 'user',
+                    content: item.requestOptions.prompt
+                })
+            if (item.text)
+                prompts.push({
+                    role: 'assistant',
+                    content: item.text
+                })
+        }
+    } else {
+        prompts.push({
+            role: 'user',
+            content: message
+        })
     }
 
     try {
         await fetchChat<Chat.ConversationResponse>({
             prompts,
             model,
+            online,
             onDownloadProgress: ({ event }) => {
                 const xhr = event.target
                 const { responseText } = xhr
@@ -459,7 +479,7 @@ onUnmounted(() => {
                             class="text-xl"
                             :class="{ 'text-[#4b9e5f]': usingContext, 'text-[#a8071a]': !usingContext }"
                         >
-                            <SvgIcon icon="ri:chat-history-line" />
+                            <SvgIcon icon="gis:earth-net" />
                         </span>
                     </HoverButton>
                     <NAutoComplete v-model:value="prompt" :options="searchOptions" :render-label="renderOption">
